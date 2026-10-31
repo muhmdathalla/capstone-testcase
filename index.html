@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Test Case Generator — production-grade test suite builder for modern software engineering teams." />
+  <title>AI Test Case Generator — IBM SkillsBuild Capstone</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            ibm: {
+              blue:    '#0f62fe',
+              hover:   '#0353e9',
+              active:  '#002d9c',
+              light:   '#edf5ff',
+              gray10:  '#f4f4f4',
+              gray20:  '#e0e0e0',
+              gray70:  '#525252',
+              gray90:  '#262626',
+              gray100: '#161616',
+            }
+          },
+          fontFamily: {
+            sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+          },
+          backdropBlur: {
+            xs: '2px',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- IBM Plex Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="font-sans min-h-screen flex flex-col" id="app-root">
+
+  <!-- Skip to main content (WCAG) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ═══════════════════════════════════════════ HEADER ══════════════════════════════════════════ -->
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <div class="header-brand">
+        <!-- Brand icon: gradient background with checkmark motif -->
+        <div class="brand-icon-wrap" aria-hidden="true">
+          <svg class="brand-icon" viewBox="0 0 36 36" fill="none" focusable="false">
+            <rect width="36" height="36" rx="10" fill="url(#brandGrad)"/>
+            <path d="M9 12h18M9 18h12M9 24h15" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+            <circle cx="27" cy="24" r="5" fill="rgba(255,255,255,0.15)" stroke="#fff" stroke-width="1.6"/>
+            <path d="M25.2 24l1.2 1.2 2.4-2.4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="brandGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0f62fe"/>
+                <stop offset="100%" stop-color="#6366f1"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <span class="brand-name">AI Test Case Generator</span>
+          <span class="brand-sub">IBM SkillsBuild Capstone</span>
+        </div>
+      </div>
+
+      <!-- Header centre: decorative status pill -->
+      <div class="header-status" aria-hidden="true">
+        <span class="status-dot"></span>
+        <span>Engine Ready</span>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-history-toggle" class="icon-btn" aria-label="Toggle history sidebar" aria-expanded="false" aria-controls="history-drawer">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+          <span class="sr-only">History</span>
+        </button>
+        <button id="btn-theme-toggle" class="icon-btn" aria-label="Toggle dark mode">
+          <svg id="icon-sun" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="hidden"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 1.78a1 1 0 011.42 1.42l-.7.7a1 1 0 11-1.42-1.42l.7-.7zM18 9a1 1 0 100 2h-1a1 1 0 100-2h1zM5.05 4.05a1 1 0 011.42 0l.7.7a1 1 0 01-1.42 1.42l-.7-.7a1 1 0 010-1.42zM10 15a5 5 0 100-10 5 5 0 000 10zm0 2a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-7-2a1 1 0 100 2H2a1 1 0 100-2h1zm12.95.95a1 1 0 01-1.42 0l-.7-.7a1 1 0 111.42-1.42l.7.7a1 1 0 010 1.42zM3.05 15.95a1 1 0 01-1.42-1.42l.7-.7a1 1 0 011.42 1.42l-.7.7z" clip-rule="evenodd"/></svg>
+          <svg id="icon-moon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════ LAYOUT ══════════════════════════════════════════ -->
+  <div class="app-layout" id="app-layout">
+
+    <!-- ──────────────────── HISTORY DRAWER ──────────────────── -->
+    <aside id="history-drawer" class="history-drawer" role="complementary" aria-label="Test suite history" aria-hidden="true">
+      <div class="drawer-header">
+        <div class="drawer-title-group">
+          <span class="drawer-title-icon" aria-hidden="true">🕓</span>
+          <h2 class="drawer-title">History</h2>
+        </div>
+        <button id="btn-history-close" class="icon-btn" aria-label="Close history sidebar">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </button>
+      </div>
+      <ul id="history-list" class="history-list" role="list" aria-label="Past test suites">
+        <!-- Populated by JS -->
+      </ul>
+      <p id="history-empty" class="history-empty" role="status">No history yet. Generate your first test suite!</p>
+    </aside>
+
+    <!-- Drawer overlay (mobile) -->
+    <div id="drawer-overlay" class="drawer-overlay" aria-hidden="true"></div>
+
+    <!-- ──────────────────── MAIN CONTENT ──────────────────── -->
+    <main id="main-content" class="main-content" role="main">
+
+      <!-- ── INPUT PANEL ── -->
+      <section class="panel input-panel" aria-labelledby="input-panel-heading">
+        <header class="panel-header">
+          <div class="panel-header-left">
+            <span class="panel-step-badge" aria-hidden="true">01</span>
+            <h2 id="input-panel-heading" class="panel-title">
+              Requirements &amp; Spec Input
+            </h2>
+          </div>
+          <span class="panel-tag">Step 1 of 2</span>
+        </header>
+
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="requirements-input" class="form-label">
+              User Story / Acceptance Criteria / PRD Feature
+              <span class="required-star" aria-label="required">*</span>
+            </label>
+            <textarea
+              id="requirements-input"
+              class="form-textarea"
+              rows="7"
+              placeholder="Examples:&#10;• As a user, I want to log in with email and password so that I can access my dashboard.&#10;• The checkout process must validate credit card details and decline invalid cards.&#10;• The API endpoint /users must return paginated results with a default page size of 20.&#10;• Uploading a profile photo should accept JPG/PNG under 5MB and reject all other formats."
+              aria-required="true"
+              aria-describedby="req-hint"
+              spellcheck="true"
+            ></textarea>
+            <p id="req-hint" class="form-hint">Paste one or more requirements. The engine extracts verbs, conditions, and boundaries automatically.</p>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-group--half">
+              <label for="testing-type" class="form-label">Testing Type</label>
+              <div class="select-wrap">
+                <select id="testing-type" class="form-select" aria-describedby="type-hint">
+                  <option value="functional">⚙️  Functional Testing</option>
+                  <option value="edge">⚠️  Edge &amp; Boundary Cases</option>
+                  <option value="security">🔒  Security &amp; Authentication</option>
+                  <option value="performance">🚀  Performance / Stress</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+              </div>
+              <p id="type-hint" class="form-hint sr-only">Choose the category of tests to generate.</p>
+            </div>
+
+            <div class="form-group form-group--half">
+              <label for="output-format" class="form-label">Output Format</label>
+              <div class="select-wrap">
+                <select id="output-format" class="form-select" aria-describedby="fmt-hint">
+                  <option value="bdd">🥒  BDD / Gherkin (Given-When-Then)</option>
+                  <option value="table">📊  Structured Table Format</option>
+                  <option value="json">{ }  Standard JSON Schema</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+              </div>
+              <p id="fmt-hint" class="form-hint sr-only">Choose how the generated test cases are structured.</p>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button id="btn-generate" class="btn-primary" aria-describedby="gen-hint">
+              <span id="btn-generate-text">Generate Test Cases</span>
+              <span id="btn-generate-spinner" class="spinner" aria-hidden="true" hidden></span>
+            </button>
+            <button id="btn-clear" class="btn-ghost" aria-label="Clear requirements input">Clear</button>
+          </div>
+          <p id="gen-hint" class="form-hint sr-only">Analyzes your requirements and produces a full test suite.</p>
+        </div>
+      </section>
+
+      <!-- ── WORKSPACE / RESULTS PANEL ── -->
+      <section class="panel results-panel" aria-labelledby="results-panel-heading" id="results-section">
+        <header class="panel-header results-panel-header">
+          <div class="panel-header-left">
+            <span class="panel-step-badge panel-step-badge--alt" aria-hidden="true">02</span>
+            <h2 id="results-panel-heading" class="panel-title">
+              Test Suite Workspace
+            </h2>
+          </div>
+
+          <div class="results-toolbar" role="toolbar" aria-label="Results toolbar">
+            <!-- Search -->
+            <div class="search-wrap">
+              <label for="search-input" class="sr-only">Search test cases</label>
+              <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+              <input id="search-input" type="search" class="search-input" placeholder="Search test cases…" aria-label="Search test cases" />
+            </div>
+
+            <!-- Priority filter -->
+            <div class="filter-group" role="group" aria-label="Filter by priority">
+              <button class="filter-btn filter-btn--active" data-filter="all" aria-pressed="true">All</button>
+              <button class="filter-btn filter-btn--p1" data-filter="P1" aria-pressed="false">P1</button>
+              <button class="filter-btn filter-btn--p2" data-filter="P2" aria-pressed="false">P2</button>
+              <button class="filter-btn filter-btn--p3" data-filter="P3" aria-pressed="false">P3</button>
+            </div>
+
+            <!-- Export actions -->
+            <div class="export-group" role="group" aria-label="Export options">
+              <button id="btn-copy-md" class="btn-action" aria-label="Copy test suite as Markdown" title="Copy Markdown" disabled>
+                <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/></svg>
+                Copy MD
+              </button>
+              <button id="btn-export-json" class="btn-action" aria-label="Export test suite as JSON file" title="Export JSON" disabled>
+                <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                JSON
+              </button>
+              <button id="btn-print" class="btn-action" aria-label="Print or export test suite as PDF" title="Print / PDF" disabled>
+                <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a1 1 0 001 1h8a1 1 0 001-1v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a1 1 0 00-1-1H6a1 1 0 00-1 1zm2 0h6v3H7V4zm-1 9v-1h8v1H6zm8-4a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                Print
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Stats bar -->
+        <div id="stats-bar" class="stats-bar" role="status" aria-live="polite" hidden>
+          <span id="stat-total" class="stat-item"></span>
+          <span id="stat-p1" class="stat-item stat-p1"></span>
+          <span id="stat-p2" class="stat-item stat-p2"></span>
+          <span id="stat-p3" class="stat-item stat-p3"></span>
+          <span id="stat-passed" class="stat-item stat-passed"></span>
+          <span id="stat-failed" class="stat-item stat-failed"></span>
+        </div>
+
+        <!-- Empty / prompt state -->
+        <div id="results-empty" class="results-empty" role="status">
+          <div class="empty-glow-ring" aria-hidden="true">
+            <svg class="empty-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <circle cx="32" cy="32" r="28" stroke="url(#emptyGrad)" stroke-width="1.5" stroke-opacity=".4"/>
+              <path d="M19 23h26M19 32h18M19 41h22" stroke="url(#emptyGrad)" stroke-width="2" stroke-linecap="round" stroke-opacity=".6"/>
+              <circle cx="47" cy="41" r="9" fill="rgba(15,98,254,0.08)" stroke="url(#emptyGrad)" stroke-width="1.5"/>
+              <path d="M44.5 41l1.5 1.5 3-3" stroke="#0f62fe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="emptyGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#0f62fe"/>
+                  <stop offset="100%" stop-color="#6366f1"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <p class="empty-title">No test cases yet</p>
+          <p class="empty-sub">Fill in your requirements above and click <strong>Generate Test Cases</strong> to build your suite.</p>
+        </div>
+
+        <!-- Cards container -->
+        <div id="test-cards-container" class="test-cards-container" role="list" aria-label="Generated test cases" aria-live="polite"></div>
+
+        <!-- No-results state (after filter) -->
+        <div id="no-filter-results" class="results-empty" role="status" hidden>
+          <p class="empty-title">No matches</p>
+          <p class="empty-sub">Try adjusting your search or filter.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ TOAST ═══════════════════════════════════════════ -->
+  <div id="toast-container" class="toast-container" role="region" aria-label="Notifications" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ═══════════════════════════════════════════ FOOTER ══════════════════════════════════════════ -->
+  <footer class="app-footer" role="contentinfo">
+    <p>AI Test Case Generator &mdash; IBM SkillsBuild IT Capstone &copy; 2026</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
